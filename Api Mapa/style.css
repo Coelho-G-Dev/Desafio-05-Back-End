@@ -1,0 +1,256 @@
+/**
+ * @license
+ * Copyright 2024 Google LLC. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Este CSS foi unificado e limpo a partir de múltiplos exemplos para estilizar
+ * a aplicação de cálculo de trajeto.
+ */
+
+/* === ESTILOS GERAIS E LAYOUT BASE === */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  color: #202124;
+}
+
+.hide {
+  display: none !important;
+}
+
+.commutes {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* Previne barras de rolagem no container principal */
+}
+
+/* === MAPA === */
+.commutes-map {
+  flex-grow: 1; /* Faz o mapa ocupar todo o espaço vertical disponível */
+  background-color: #e5e3df; /* Cor de fundo enquanto o mapa carrega */
+  position: relative;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+}
+
+/* === PAINEL DE INFORMAÇÕES (INFERIOR) === */
+.commutes-info {
+  flex-shrink: 0; /* Impede que o painel encolha */
+  padding: 8px 16px;
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+/* === PAINEL DE ESTADO INICIAL === */
+.commutes-initial-state {
+  display: flex;
+  align-items: center;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  padding: 0 16px;
+  min-height: 98px;
+}
+
+.commutes-initial-state svg {
+  align-self: center;
+}
+
+.commutes-initial-state .description {
+  flex-grow: 1;
+  padding: 0 16px;
+}
+
+.commutes-initial-state .description .heading {
+  font-size: 22px;
+  line-height: 28px;
+  margin: 0;
+}
+
+.commutes-initial-state .description p {
+  color: #5f6368;
+  font-size: 13px;
+  line-height: 20px;
+  margin: 0;
+}
+
+.commutes-initial-state .add-button,
+#results-panel #new-search-button {
+  align-self: center;
+  background-color: #1a73e8;
+  border: 1px solid #1a73e8;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  fill: #fff;
+  padding: 8px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.commutes-initial-state .add-button .label {
+  padding-left: 8px;
+}
+
+/* === PAINEL DE RESULTADOS E DESTINOS === */
+#results-panel {
+  padding: 10px;
+}
+
+#results-panel h2 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+#directions-panel {
+  max-height: 200px; /* Limita a altura do texto de direções */
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+/* === MODAL PARA ADICIONAR DESTINO === */
+.commutes-modal-container {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.commutes-modal {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 400px;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.commutes-modal .heading {
+  font-size: 24px;
+  line-height: 32px;
+  margin: 0 0 16px 0;
+}
+
+.commutes-modal input[type="text"] {
+  font-size: 16px;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.commutes-modal .travel-modes {
+  display: flex;
+  margin-bottom: 24px;
+}
+
+.commutes-modal .travel-modes input[type="radio"] {
+  opacity: 0;
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.commutes-modal .travel-modes label {
+  flex: 1;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid #dadce0;
+  cursor: pointer;
+  fill: #5f6368;
+  transition: background-color 0.2s, fill 0.2s;
+}
+
+.commutes-modal .travel-modes label:first-of-type {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.commutes-modal .travel-modes label:last-of-type {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-left-width: 0;
+}
+
+.commutes-modal .travel-modes label:hover {
+  background-color: #f1f3f4;
+}
+
+.commutes-modal .travel-modes input[type="radio"]:checked + label {
+  background-color: #e8f0fe;
+  border-color: #1a73e8;
+  fill: #1967d2;
+  z-index: 1;
+}
+
+.commutes-modal .travel-modes input[type="radio"]:focus-visible + label {
+  outline: 2px solid Highlight;
+  outline: 2px solid -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+.commutes-modal .travel-modes svg {
+  width: 24px;
+  height: 24px;
+}
+
+.commutes-modal .modal-action-bar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.commutes-modal .modal-action-bar button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.commutes-modal .modal-action-bar .cancel-button {
+  color: #5f6368;
+}
+.commutes-modal .modal-action-bar .cancel-button:hover {
+  background-color: #f1f3f4;
+}
+
+.commutes-modal .modal-action-bar .add-destination-button {
+  color: #1a73e8;
+}
+.commutes-modal .modal-action-bar .add-destination-button:hover {
+  background-color: #e8f0fe;
+}
+
+
+/* Estilos para o painel de direções gerado pela API */
+.adp-summary, .adp-legal {
+  font-size: 12px;
+}
+.adp-directions, .adp-summary {
+  padding: 10px;
+}
+.adp-step {
+  padding: 8px 0;
+}
