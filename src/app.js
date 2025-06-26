@@ -6,11 +6,11 @@ import connectDB from './config/db.js';
 import mongoSanitize from 'express-mongo-sanitize';
 import session from 'express-session';
 import passport from 'passport';
-import './config/passport-setup.js'; 
+import './config/passport-setup.js';
 import './config/emailTransporter.js';
-import cors from 'cors'; 
-import corsOptions from './config/corsOptions.js'; 
-
+import cors from 'cors';
+import corsOptions from './config/corsOptions.js';
+import MongoStore from 'connect-mongo'; // Importa o connect-mongo
 
 import placesRoutes from './routes/placesRoutes.js';
 import authRoutes from './routes/authRoutes.js';
@@ -20,8 +20,8 @@ connectDB();
 
 const app = express();
 
-// 1. CORS 
-app.use(cors(corsOptions)); 
+// 1. CORS
+app.use(cors(corsOptions));
 
 // 2. Body parser para JSON
 app.use(express.json());
@@ -32,13 +32,22 @@ app.use(mongoSanitize());
 // 4. Servir a documentação Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// 5. Middleware de Sessão 
+// 5. Middleware de Sessão (Configurado para produção com MongoStore)
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 24 * 60 * 60 * 1000, secure: process.env.NODE_ENV === 'production' },
+    // Configura o MongoStore para armazenar as sessões no MongoDB
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGODB_URI, // Certifique-se que essa variável de ambiente existe no seu .env
+        collectionName: 'sessions', // Nome da coleção onde as sessões serão salvas
+        ttl: 24 * 60 * 60, // Tempo de vida da sessão em segundos (24 horas)
+    }),
+    cookie: { 
+        maxAge: 24 * 60 * 60 * 1000, // 24 horas
+        secure: process.env.NODE_ENV === 'production' 
+    },
   })
 );
 
@@ -46,22 +55,19 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-//  ROTAS E SERVIÇOS 
+// ROTAS DA API
 
-//app.use(express.static('public'));
-
-
-// Rotas da API
+// Rotas principais da API
 app.use('/api', placesRoutes);
 app.use('/api/auth', authRoutes); // Rotas de autenticação (interna, social e redefinição de senha)
 
-// Rota de teste para a raiz (/)
+// Rota raiz para verificar se a API está online
 app.get('/', (req, res) => {
-    res.sendFile('index.html', { root: 'public' });
+    res.json({ message: 'API Desafio-05 está no ar!', docs: '/api-docs' });
 });
 
 
-// Rota para verificar o status de autenticação no frontend
+// Rota para verificar o status de autenticação do usuário
 app.get('/api/user', (req, res) => {
   if (req.isAuthenticated()) {
     res.json({
@@ -76,15 +82,15 @@ app.get('/api/user', (req, res) => {
 });
 
 
-// Tratamento de rotas não encontradas 
+// Tratamento de rotas não encontradas
 app.use((req, res, next) => {
-    res.status(404).send('Rota não encontrada.');
+    res.status(404).json({ message: 'Endpoint não encontrado.' });
 });
 
-// Middleware de tratamento de erros global 
+// Middleware de tratamento de erros global
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).send('Algo deu errado no servidor!');
+    res.status(500).json({ message: 'Algo deu errado no servidor!' });
 });
 
 const PORT = process.env.PORT || 3001;
