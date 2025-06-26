@@ -46,7 +46,7 @@ Este projeto é o **back‑end** de uma aplicação web que integra **Google Map
 ### 🔧 Instalação
 
 ```bash
-git clone https://github.com/SEU_USUARIO/NOME_REPOSITORIO.git
+git clone https://github.com/Coehlo-Gab-Dev/Desafio-05-Back-End
 cd NOME_REPOSITORIO
 npm install
 ```
