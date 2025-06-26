@@ -301,14 +301,14 @@ router.post('/reset-password', resetPassword);
  * description: Acesso a este endpoint requer um token JWT válido. O token deve ser enviado no cabeçalho 'Authorization' como 'Bearer <token>'.
  * tags: [Autenticação]
  * security:
- * - bearerAuth: [] # Indica que esta rota requer o esquema de segurança bearerAuth (JWT)
+ * - bearerAuth: []
  * responses:
  * 200:
  * description: Dados do perfil do usuário.
  * content:
  * application/json:
  * schema:
- * $ref: '#/components/schemas/UserProfile' # Referencia o schema UserProfile
+ * $ref: '#/components/schemas/UserProfile'
  * 401:
  * description: Não autorizado (token JWT ausente, inválido ou expirado).
  * content:
@@ -326,6 +326,10 @@ router.post('/reset-password', resetPassword);
  * $ref: '#/components/schemas/ErrorResponse'
  * 500:
  * description: Erro interno do servidor.
+ * content:
+ * application/json:
+ * schema:
+ * $ref: '#/components/schemas/ErrorResponse'
  */
 router.get('/profile', protect, getUserProfile);
 
@@ -337,7 +341,7 @@ router.get('/profile', protect, getUserProfile);
  * description: Acesso a este endpoint requer um token JWT válido e que o usuário possua o papel 'admin'. O token deve ser enviado no cabeçalho 'Authorization' como 'Bearer <token>'.
  * tags: [Autenticação]
  * security:
- * - bearerAuth: [] # Indica que esta rota requer autenticação JWT
+ * - bearerAuth: []
  * responses:
  * 200:
  * description: Acesso concedido.
@@ -350,6 +354,10 @@ router.get('/profile', protect, getUserProfile);
  * value: { message: "Bem-vindo, [username]! Você é um administrador." }
  * 401:
  * description: Não autenticado (token JWT ausente, inválido ou expirado).
+ * content:
+ * application/json:
+ * schema:
+ * $ref: '#/components/schemas/ErrorResponse'
  * 403:
  * description: Proibido (usuário autenticado, mas sem papel de administrador).
  * content:
@@ -361,6 +369,10 @@ router.get('/profile', protect, getUserProfile);
  * value: { message: "Usuário com papel 'user' não tem permissão para acessar esta rota" }
  * 500:
  * description: Erro interno do servidor.
+ * content:
+ * application/json:
+ * schema:
+ * $ref: '#/components/schemas/ErrorResponse'
  */
 router.get('/admin', protect, authorize('admin'), (req, res) => {
   res.json({ message: `Bem-vindo, ${req.user.username}!` });
@@ -387,6 +399,10 @@ router.get('/admin', protect, authorize('admin'), (req, res) => {
  * value: { message: "Logout bem-sucedido." }
  * 500:
  * description: Erro interno do servidor ao tentar fazer logout.
+ * content:
+ * application/json:
+ * schema:
+ * $ref: '#/components/schemas/ErrorResponse'
  */
 router.get('/logout', logoutUser);
 
