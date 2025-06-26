@@ -19,7 +19,7 @@ const router = express.Router();
  *   description: Rotas de registro, login e OAuth
  */
 
-/* ---------- Autenticação interna ---------- */
+/*  Autenticação interna  */
 
 /**
  * @swagger
@@ -75,7 +75,7 @@ router.post('/register', registerUser);
  */
 router.post('/login', loginUser);
 
-/* ---------- Autenticação Social ---------- */
+/*  Autenticação Social  */
 
 /**
  * Função auxiliar genérica para Google e GitHub
@@ -121,7 +121,7 @@ router.get('/google/callback', socialAuthCallback('google'));
 router.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
 router.get('/github/callback', socialAuthCallback('github'));
 
-/* ---------- Recuperação de senha ---------- */
+/*  Recuperação de senha  */
 
 /**
  * @swagger
@@ -147,7 +147,7 @@ router.post('/forgot-password', forgotPassword);
 
 router.post('/reset-password', resetPassword);
 
-/* ---------- Rotas protegidas ---------- */
+/*  Rotas protegidas  */
 
 /**
  * @swagger
@@ -183,7 +183,7 @@ router.get('/admin', protect, authorize('admin'), (req, res) => {
   res.json({ message: `Bem-vindo, ${req.user.username}!` });
 });
 
-/* ---------- Logout ---------- */
+/*  Logout  */
 router.get('/logout', logoutUser);
 
 export default router;
