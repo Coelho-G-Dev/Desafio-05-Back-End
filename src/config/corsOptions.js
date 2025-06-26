@@ -1,4 +1,3 @@
-// Lista de domínios que podem acessar sua API
 const whitelist = [
     'https://seu-frontend.netlify.app', // URL do seu site publicado
     'http://127.0.0.1:5500',            // Para testes locais

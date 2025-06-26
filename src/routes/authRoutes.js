@@ -6,70 +6,184 @@ import {
   getUserProfile,
   logoutUser,
   forgotPassword,
-  resetPassword
+  resetPassword,
 } from '../controllers/authController.js';
 import { protect, authorize } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-//Autenticação Interna
+/**
+ * @swagger
+ * tags:
+ *   name: Autenticação
+ *   description: Rotas de registro, login e OAuth
+ */
+
+/* ---------- Autenticação interna ---------- */
+
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     summary: Registra um novo usuário interno
+ *     tags: [Autenticação]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [username, email, password]
+ *             properties:
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Usuário criado
+ *       400:
+ *         description: Dados inválidos
+ */
 router.post('/register', registerUser);
+
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Autentica usuário interno e devolve JWT
+ *     tags: [Autenticação]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, password]
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Sucesso – retorna token
+ *       401:
+ *         description: Credenciais inválidas
+ */
 router.post('/login', loginUser);
 
-//Callback  para Autenticação Social
+/* ---------- Autenticação Social ---------- */
+
+/**
+ * Função auxiliar genérica para Google e GitHub
+ * (não precisa ser documentada no Swagger).
+ */
 const socialAuthCallback = (strategyName) => (req, res, next) => {
   passport.authenticate(strategyName, { session: true }, (err, user, info) => {
-    if (err) {
-      console.error(`Erro na autenticação ${strategyName}:`, err);
-      return res.redirect(`/?authError=server_error`); // Erro do servidor(interno)
-    }
-    if (!user) {
-      // Autenticação falhou- credenciais inválidas
-      const errorMessage = info && info.message ? info.message : 'authentication_failed';
-      return res.redirect(`/?authError=${errorMessage}`);
-    }
-    // Autenticação bem-sucedida, logar o usuário
+    if (err) return res.redirect(`/?authError=server_error`);
+    if (!user) return res.redirect(`/?authError=${info?.message ?? 'authentication_failed'}`);
     req.logIn(user, (loginErr) => {
-      if (loginErr) {
-        console.error(`Erro ao logar usuário ${strategyName}:`, loginErr);
-        return res.redirect(`/?authError=login_failed`);
-      }
-      res.redirect('/'); // Redireciona para a raiz do frontend após sucesso
+      if (loginErr) return res.redirect(`/?authError=login_failed`);
+      res.redirect('/');
     });
   })(req, res, next);
 };
 
-//Autenticação Social (Google e GitHub)
+/* Google OAuth */
+/**
+ * @swagger
+ * /api/auth/google:
+ *   get:
+ *     summary: Inicia login via Google OAuth
+ *     tags: [Autenticação]
+ *     responses:
+ *       302:
+ *         description: Redireciona para o Google
+ */
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-// Inicia o fluxo do Google
-router.get(
-  '/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
-);
-
-// Callback do Google após a autenticação
+/**
+ * @swagger
+ * /api/auth/google/callback:
+ *   get:
+ *     summary: Callback do Google OAuth
+ *     tags: [Autenticação]
+ *     responses:
+ *       302:
+ *         description: Redireciona para o frontend após login
+ */
 router.get('/google/callback', socialAuthCallback('google'));
 
-// Inicia o fluxo do GitHub
-router.get(
-  '/github',
-  passport.authenticate('github', { scope: ['user:email'] })
-);
-
-// Callback do GitHub após a autenticação
+/* GitHub OAuth */
+router.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
 router.get('/github/callback', socialAuthCallback('github'));
 
-//Rotas de Redefinição de Senha 
+/* ---------- Recuperação de senha ---------- */
+
+/**
+ * @swagger
+ * /api/auth/forgot-password:
+ *   post:
+ *     summary: Envia e-mail de redefinição de senha
+ *     tags: [Autenticação]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email]
+ *             properties:
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: E-mail enviado
+ */
 router.post('/forgot-password', forgotPassword);
+
 router.post('/reset-password', resetPassword);
 
-//Rotas Protegidas 
+/* ---------- Rotas protegidas ---------- */
+
+/**
+ * @swagger
+ * /api/auth/profile:
+ *   get:
+ *     summary: Retorna perfil do usuário autenticado
+ *     tags: [Autenticação]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Dados do usuário
+ *       401:
+ *         description: Não autenticado
+ */
 router.get('/profile', protect, getUserProfile);
+
+/**
+ * @swagger
+ * /api/auth/admin:
+ *   get:
+ *     summary: Exemplo de rota apenas para administradores
+ *     tags: [Autenticação]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Acesso concedido
+ *       403:
+ *         description: Sem permissão
+ */
 router.get('/admin', protect, authorize('admin'), (req, res) => {
-  res.json({ message: `Bem-vindo, ${req.user.username}! Você é um administrador.` });
+  res.json({ message: `Bem-vindo, ${req.user.username}!` });
 });
 
-//Rota de Logout 
+/* ---------- Logout ---------- */
 router.get('/logout', logoutUser);
 
-export default router; 
+export default router;

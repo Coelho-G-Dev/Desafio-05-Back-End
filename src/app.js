@@ -1,4 +1,6 @@
 import express from 'express';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './docs/swagger.js';
 import 'dotenv/config';
 import connectDB from './config/db.js';
 import mongoSanitize from 'express-mongo-sanitize';
@@ -6,7 +8,10 @@ import session from 'express-session';
 import passport from 'passport';
 import './config/passport-setup.js'; 
 import './config/emailTransporter.js';
+import cors from 'cors';
 import corsOptions from './config/corsOptions.js';
+
+
 
 import placesRoutes from './routes/placesRoutes.js';
 import authRoutes from './routes/authRoutes.js';
@@ -20,6 +25,8 @@ const app = express();
 app.use(cors(corsOptions));
 app.use(express.json()); // Body parser para JSON
 app.use(mongoSanitize()); // Proteção contra injeção de NoSQL
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 
 // Middleware de Sessão (passaport e OAuth)
 app.use(
@@ -36,7 +43,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // arquivos estáticos do diretório 'public' front de teste
-// app.use(express.static('public'));
+//app.use(express.static('public')); - (Para esntrar em modo de teste precisamos descomentar essa parte )
 
 // Rotas da API
 app.use('/api', placesRoutes);

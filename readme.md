@@ -74,7 +74,7 @@ BASE_URL=http://localhost:3001
 ```
 
 > ⚠️ **Importante:** cadastre as URLs de callback exatamente como acima
-> nos painéis do Google e do GitHub.
+> nos painéis do Google e do GitHub, caso tenha alguma URL errada ele não irá funcionar de maneira alguma.
 
 ---
 
@@ -92,7 +92,7 @@ npm run dev   # nodemon
 npm start
 ```
 
-Servidor disponível em **http://localhost:3001** (ou na porta definida).
+Servidor disponível em **http://localhost:3001** (Após o deploy alteraremos).
 
 ---
 
