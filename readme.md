@@ -47,7 +47,7 @@ Este projeto é o **back‑end** de uma aplicação web que integra **Google Map
 
 ```bash
 git clone https://github.com/Coehlo-Gab-Dev/Desafio-05-Back-End
-cd NOME_REPOSITORIO
+cd Desafio-05-Back-End
 npm install
 ```
 
@@ -92,13 +92,15 @@ npm run dev   # nodemon
 npm start
 ```
 
-Servidor disponível em **http://localhost:3001** (Após o deploy alteraremos).
+Servidor disponível em **https://desafio-05-api.onrender.com** .
 
 ---
 
 ## 📚 Documentação da API
 
-> A documentação interativa via Swagger será disponibilizada em breve.
+> A documentação interativa via Swagger esta disponivel em: **https://desafio-05-api.onrender.com/api-docs**
+
+
 > Abaixo, os principais endpoints.
 
 ### 🔐 Autenticação (`/api/auth`)

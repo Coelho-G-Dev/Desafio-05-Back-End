@@ -1,19 +1,25 @@
 const whitelist = [
-    'https://seu-frontend.netlify.app', // URL do seu site publicado
-    'http://127.0.0.1:5500',            // Para testes locais
-    'http://localhost:5500',            // Para testes locais
-    'http://localhost:3001'             // Para testes locais
+  //'https://seu-frontend.netlify.app', // URL do seu site publicado(assim que for publicado)
+  'http://127.0.0.1:5500',             // Para testes locais (ex: Live Server do VS Code)
+  'http://localhost:5500',             // Para testes locais (ex: Live Server do VS Code)
+  'http://localhost:3001',             // Para o frontend ser servido pelo próprio backend (se usar express.static)
+  'https://desafio-05-api.onrender.com' // URL do deploy no Render
 ];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // Permite requisições sem 'origin' (ex: Postman, apps mobile) ou que estejam na whitelist
-    if (whitelist.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Acesso não permitido pelo CORS'));
-    }
-  }
+      // Permite requisições sem 'origin' (Postman)
+      // ou que estejam na whitelist.
+      if (whitelist.indexOf(origin) !== -1 || !origin) {
+          callback(null, true);
+      } else {
+          // Se a origem não estiver na whitelist, retorna um erro CORS.
+          callback(new Error('Acesso não permitido pelo CORS'));
+      }
+  },
+  credentials: true, // Permite o envio de cookies e cabeçalhos de autorização
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos HTTP permitidos
+  allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
 };
 
 export default corsOptions;

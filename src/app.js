@@ -8,9 +8,8 @@ import session from 'express-session';
 import passport from 'passport';
 import './config/passport-setup.js'; 
 import './config/emailTransporter.js';
-import cors from 'cors';
-import corsOptions from './config/corsOptions.js';
-
+import cors from 'cors'; 
+import corsOptions from './config/corsOptions.js'; 
 
 
 import placesRoutes from './routes/placesRoutes.js';
@@ -21,14 +20,19 @@ connectDB();
 
 const app = express();
 
-// Middlewares
-app.use(cors(corsOptions));
-app.use(express.json()); // Body parser para JSON
-app.use(mongoSanitize()); // Proteção contra injeção de NoSQL
+// 1. CORS 
+app.use(cors(corsOptions)); 
+
+// 2. Body parser para JSON
+app.use(express.json());
+
+// 3. Proteção contra injeção de NoSQL
+app.use(mongoSanitize());
+
+// 4. Servir a documentação Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-
-// Middleware de Sessão (passaport e OAuth)
+// 5. Middleware de Sessão 
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -42,19 +46,22 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// arquivos estáticos do diretório 'public' front de teste
-//app.use(express.static('public')); - (Para esntrar em modo de teste precisamos descomentar essa parte )
+//  ROTAS E SERVIÇOS 
+
+//app.use(express.static('public'));
+
 
 // Rotas da API
 app.use('/api', placesRoutes);
 app.use('/api/auth', authRoutes); // Rotas de autenticação (interna, social e redefinição de senha)
 
-// Rota de teste
+// Rota de teste para a raiz (/)
 app.get('/', (req, res) => {
-    res.send('API está rodando...');
+    res.sendFile('index.html', { root: 'public' });
 });
 
-// Rota para verificar o status de autenticação no front end
+
+// Rota para verificar o status de autenticação no frontend
 app.get('/api/user', (req, res) => {
   if (req.isAuthenticated()) {
     res.json({
@@ -64,17 +71,17 @@ app.get('/api/user', (req, res) => {
       role: req.user.role,
     });
   } else {
-    res.status(401).json({ message: 'Usuário não autenticado via sessão' });
+    res.status(401).json({ message: 'Utilizador não autenticado via sessão' });
   }
 });
 
 
-// Tratamento de rotas não encontradas
+// Tratamento de rotas não encontradas 
 app.use((req, res, next) => {
     res.status(404).send('Rota não encontrada.');
 });
 
-// Middleware de tratamento de erros global
+// Middleware de tratamento de erros global 
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Algo deu errado no servidor!');
@@ -84,5 +91,5 @@ const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
     console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
-    console.log(`Variáveis de ambiente carregadas. Verifique seu .env`);
+    console.log(`Variáveis de ambiente carregadas. Verifique o seu .env`);
 });
