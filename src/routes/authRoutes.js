@@ -16,7 +16,7 @@ const router = express.Router();
 /**
  * @swagger
  * tags:
- * name: Autenticação
+ * - name: Autenticação
  * description: Operações relacionadas a registro, login e gestão de usuários (incluindo login social e redefinição de senha).
  */
 
@@ -110,7 +110,6 @@ router.post('/login', loginUser);
 
 /* ---------- Autenticação Social ---------- */
 
-// Função auxiliar genérica para Google e GitHub
 const socialAuthCallback = (strategyName) => (req, res, next) => {
   passport.authenticate(strategyName, { session: true }, (err, user, info) => {
     if (err) {
