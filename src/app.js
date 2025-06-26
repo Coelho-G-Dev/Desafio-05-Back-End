@@ -10,7 +10,7 @@ import './config/passport-setup.js';
 import './config/emailTransporter.js';
 import cors from 'cors';
 import corsOptions from './config/corsOptions.js';
-import MongoStore from 'connect-mongo'; // Importa o connect-mongo
+import MongoStore from 'connect-mongo'; 
 
 import placesRoutes from './routes/placesRoutes.js';
 import authRoutes from './routes/authRoutes.js';
