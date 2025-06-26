@@ -34,25 +34,25 @@ const router = express.Router();
  * content:
  * application/json:
  * schema:
- * $ref: '#/components/schemas/UserRegister' # Referencia o schema de registro de usuário
+ * $ref: '#/components/schemas/UserRegister'
  * responses:
  * 201:
  * description: Usuário registrado com sucesso. Retorna os dados do usuário e um token JWT.
  * content:
  * application/json:
  * schema:
- * $ref: '#/components/schemas/AuthResponse' # Referencia o schema de resposta de autenticação
+ * $ref: '#/components/schemas/AuthResponse'
  * 400:
  * description: Requisição inválida (e.g., dados ausentes, senha fraca, email já existe).
  * content:
  * application/json:
  * schema:
- * $ref: '#/components/schemas/ErrorResponse' # Referencia o schema de erro
+ * $ref: '#/components/schemas/ErrorResponse'
  * examples:
  * MissingData:
  * value: { message: "Por favor, preencha todos os campos obrigatórios." }
  * WeakPassword:
- * value: { message: "A senha deve ter pelo menos 8 caracteres." }
+ * value: { message: "A senha não atende a todos os requisitos de segurança." }
  * EmailExists:
  * value: { message: "Usuário com este e-mail já existe." }
  * 500:
@@ -76,14 +76,14 @@ router.post('/register', registerUser);
  * content:
  * application/json:
  * schema:
- * $ref: '#/components/schemas/UserLogin' # Referencia o schema de login de usuário
+ * $ref: '#/components/schemas/UserLogin'
  * responses:
  * 200:
  * description: Login bem-sucedido. Retorna os dados do usuário e o token JWT.
  * content:
  * application/json:
  * schema:
- * $ref: '#/components/schemas/AuthResponse' # Referencia o schema de resposta de autenticação
+ * $ref: '#/components/schemas/AuthResponse'
  * 401:
  * description: Credenciais inválidas (email ou senha incorretos).
  * content:
@@ -110,6 +110,7 @@ router.post('/login', loginUser);
 
 /* ---------- Autenticação Social ---------- */
 
+// Função auxiliar genérica para Google e GitHub
 const socialAuthCallback = (strategyName) => (req, res, next) => {
   passport.authenticate(strategyName, { session: true }, (err, user, info) => {
     if (err) {
@@ -150,7 +151,7 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
  * /api/auth/google/callback:
  * get:
  * summary: Callback do Google OAuth após autenticação bem-sucedida ou falha.
- * description: Este é o endpoint para o qual o Google redireciona após o usuário interagir com a tela de consentimento. O backend processa a resposta, autentica/vincula o usuário e redireciona para o frontend.
+ * description: Este é o endpoint para o qual o Google redireciona após o usuário interagir com a tela de consentimento. O backend processa a resposta, autentica/vincula o usuário e redireciona para o frontend. Em caso de falha de autenticação (e.g., email já vinculado a outra conta), o frontend recebe um parâmetro 'authError' na URL.
  * tags: [Autenticação]
  * responses:
  * 302:
@@ -180,7 +181,7 @@ router.get('/github', passport.authenticate('github', { scope: ['user:email'] })
  * /api/auth/github/callback:
  * get:
  * summary: Callback do GitHub OAuth após autenticação bem-sucedida ou falha.
- * description: Este é o endpoint para o qual o GitHub redireciona após o usuário autorizar a aplicação. O backend processa a resposta, autentica/vincula o usuário e redireciona para o frontend.
+ * description: Este é o endpoint para o qual o GitHub redireciona após o usuário autorizar a aplicação. O backend processa a resposta, autentica/vincula o usuário e redireciona para o frontend. Em caso de falha de autenticação (e.g., email já vinculado a outra conta), o frontend recebe um parâmetro 'authError' na URL.
  * tags: [Autenticação]
  * responses:
  * 302:
@@ -197,7 +198,7 @@ router.get('/github/callback', socialAuthCallback('github'));
  * /api/auth/forgot-password:
  * post:
  * summary: Solicita um link de redefinição de senha por email.
- * description: Envia um email contendo um link único para a página de redefinição de senha. Por segurança, a mensagem de sucesso é genérica, independentemente se o email está cadastrado ou não.
+ * description: Envia um email contendo um link único e temporário para a página de redefinição de senha. Por segurança, a mensagem de sucesso é genérica, independentemente se o email está cadastrado ou não, para evitar enumeração de usuários.
  * tags: [Autenticação]
  * requestBody:
  * required: true
@@ -235,7 +236,7 @@ router.post('/forgot-password', forgotPassword);
  * /api/auth/reset-password:
  * post:
  * summary: Redefine a senha do usuário usando um token de recuperação.
- * description: Permite que um usuário defina uma nova senha fornecendo um token válido recebido por email e a nova senha. A nova senha é validada quanto à sua força.
+ * description: Permite que um usuário defina uma nova senha fornecendo um token válido (recebido por email) e a nova senha desejada. A nova senha é validada quanto aos critérios de força (mín. 8 caracteres, maiúscula, minúscula, número, caractere especial). O token é invalidado após o uso.
  * tags: [Autenticação]
  * requestBody:
  * required: true
@@ -265,7 +266,7 @@ router.post('/forgot-password', forgotPassword);
  * SuccessMessage:
  * value: { message: "Senha redefinida com sucesso!" }
  * 400:
- * description: Token inválido/expirado, ou nova senha não atende aos requisitos de força/correspondência.
+ * description: Requisição inválida (e.g., token ausente, nova senha fraca/incompatível, token inválido/expirado).
  * content:
  * application/json:
  * schema:
@@ -277,8 +278,16 @@ router.post('/forgot-password', forgotPassword);
  * value: { message: "A senha deve ter pelo menos 8 caracteres." }
  * 404:
  * description: Usuário não encontrado para o token fornecido.
+ * content:
+ * application/json:
+ * schema:
+ * $ref: '#/components/schemas/ErrorResponse'
  * 500:
  * description: Erro interno do servidor.
+ * content:
+ * application/json:
+ * schema:
+ * $ref: '#/components/schemas/ErrorResponse'
  */
 router.post('/reset-password', resetPassword);
 
@@ -289,7 +298,7 @@ router.post('/reset-password', resetPassword);
  * /api/auth/profile:
  * get:
  * summary: Retorna os detalhes do perfil do usuário autenticado.
- * description: Acesso a este endpoint requer um token JWT válido.
+ * description: Acesso a este endpoint requer um token JWT válido. O token deve ser enviado no cabeçalho 'Authorization' como 'Bearer <token>'.
  * tags: [Autenticação]
  * security:
  * - bearerAuth: [] # Indica que esta rota requer o esquema de segurança bearerAuth (JWT)
@@ -311,6 +320,10 @@ router.post('/reset-password', resetPassword);
  * value: { message: "Não autorizado, token falhou" }
  * 404:
  * description: Usuário não encontrado.
+ * content:
+ * application/json:
+ * schema:
+ * $ref: '#/components/schemas/ErrorResponse'
  * 500:
  * description: Erro interno do servidor.
  */
@@ -321,7 +334,7 @@ router.get('/profile', protect, getUserProfile);
  * /api/auth/admin:
  * get:
  * summary: Exemplo de rota protegida apenas para usuários administradores.
- * description: Acesso a este endpoint requer um token JWT válido e que o usuário possua o papel 'admin'.
+ * description: Acesso a este endpoint requer um token JWT válido e que o usuário possua o papel 'admin'. O token deve ser enviado no cabeçalho 'Authorization' como 'Bearer <token>'.
  * tags: [Autenticação]
  * security:
  * - bearerAuth: [] # Indica que esta rota requer autenticação JWT
