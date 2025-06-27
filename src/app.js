@@ -32,7 +32,7 @@ app.use(mongoSanitize());
 // 4. Servir a documentação Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// 5. Middleware de Sessão (Configurado para produção com MongoStore)
+// 5. Middleware de Sessão 
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -40,7 +40,7 @@ app.use(
     saveUninitialized: false,
     // Configura o MongoStore para armazenar as sessões no MongoDB
     store: MongoStore.create({
-        mongoUrl: process.env.MONGODB_URI, // Certifique-se que essa variável de ambiente existe no seu .env
+        mongoUrl: process.env.MONGODB_URI, 
         collectionName: 'sessions', // Nome da coleção onde as sessões serão salvas
         ttl: 24 * 60 * 60, // Tempo de vida da sessão em segundos (24 horas)
     }),

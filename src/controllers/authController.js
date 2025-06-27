@@ -2,7 +2,11 @@ import User from '../models/User.js';
 import PasswordResetToken from '../models/PasswordResetToken.js'; 
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto'; 
-import transporter from '../config/emailTransporter.js'; 
+import transporter from '../config/emailTransporter.js';
+import jwt from 'jsonwebtoken';   
+import passport from 'passport';  
+import transporter from '../config/emailTransporter.js';
+
 /**
  * Gera  token JWT  o usuário.
  * @param {string} id - O ID do usuário -geralmente o do MongoDB
@@ -282,4 +286,14 @@ export const resetPassword = async (req, res) => {
     console.error('Erro ao redefinir senha:', error);
     res.status(500).json({ message: 'Erro no servidor ao redefinir senha.' });
   }
+};
+
+export const socialAuthCallback = (provider) => (req, res, next) => {
+  passport.authenticate(provider, { session: false }, (err, user, info) => {
+    if (err)   return res.redirect('/?authError=server_error');
+    if (!user) return res.redirect(`/?authError=${info?.message ?? 'auth_failed'}`);
+
+    const token = generateToken(user._id);
+    return res.redirect(`${process.env.CLIENT_URL}/oauth-success?token=${token}`);
+  })(req, res, next);
 };

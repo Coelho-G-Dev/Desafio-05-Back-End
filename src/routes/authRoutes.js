@@ -7,6 +7,7 @@ import {
   logoutUser,
   forgotPassword,
   resetPassword,
+  socialAuthCallback, 
 } from '../controllers/authController.js';
 import { protect, authorize } from '../middlewares/authMiddleware.js';
 
@@ -14,38 +15,49 @@ const router = express.Router();
 
 /**
  * @swagger
+ * openapi: 3.0.3
+ * info:
+ *   title: API de Autenticação
+ *   version: 1.0.0
+ *   description: |
+ *     Sistema de gerenciamento de autenticação de usuários
+ *     com login, registro e OAuth2
+ * 
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ * 
  * tags:
- *   name: Autenticação
- *   description: Rotas de registro, login e OAuth
+ *   - name: Autenticação
+ *     description: Endpoints de gerenciamento de autenticação
  */
-
-/*  Autenticação interna  */
 
 /**
  * @swagger
  * /api/auth/register:
  *   post:
- *     summary: Registra um novo usuário interno
+ *     summary: Registra um novo usuário
  *     tags: [Autenticação]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [username, email, password]
- *             properties:
- *               username:
- *                 type: string
- *               email:
- *                 type: string
- *               password:
- *                 type: string
+ *             $ref: '#/components/schemas/UserRegister'
  *     responses:
  *       201:
- *         description: Usuário criado
+ *         description: Usuário criado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthResponse'
  *       400:
  *         description: Dados inválidos
+ *       500:
+ *         description: Erro interno do servidor
  */
 router.post('/register', registerUser);
 
@@ -76,21 +88,6 @@ router.post('/register', registerUser);
 router.post('/login', loginUser);
 
 /*  Autenticação Social  */
-
-/**
- * Função auxiliar genérica para Google e GitHub
- * (não precisa ser documentada no Swagger).
- */
-const socialAuthCallback = (strategyName) => (req, res, next) => {
-  passport.authenticate(strategyName, { session: true }, (err, user, info) => {
-    if (err) return res.redirect(`/?authError=server_error`);
-    if (!user) return res.redirect(`/?authError=${info?.message ?? 'authentication_failed'}`);
-    req.logIn(user, (loginErr) => {
-      if (loginErr) return res.redirect(`/?authError=login_failed`);
-      res.redirect('/');
-    });
-  })(req, res, next);
-};
 
 /* Google OAuth */
 /**
