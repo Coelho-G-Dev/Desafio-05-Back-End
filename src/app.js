@@ -68,6 +68,44 @@ app.get('/', (req, res) => {
 
 
 // Rota para verificar o status de autenticação do usuário
+/**
+ * @swagger
+ * /api/user:
+ *   get:
+ *     summary: Verifica autenticação do utilizador via sessão
+ *     tags: [Utilizador]
+ *     responses:
+ *       200:
+ *         description: Utilizador autenticado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   example: "64a3219cf2a1e90017c3b7e2"
+ *                 username:
+ *                   type: string
+ *                   example: "joaosilva"
+ *                 email:
+ *                   type: string
+ *                   example: "joao@example.com"
+ *                 role:
+ *                   type: string
+ *                   example: "admin"
+ *       401:
+ *         description: Utilizador não autenticado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Utilizador não autenticado via sessão"
+ */
+
 app.get('/api/user', (req, res) => {
   if (req.isAuthenticated()) {
     res.json({
