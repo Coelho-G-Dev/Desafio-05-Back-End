@@ -5,7 +5,6 @@ import crypto from 'crypto';
 import transporter from '../config/emailTransporter.js';
 import jwt from 'jsonwebtoken';   
 import passport from 'passport';  
-import transporter from '../config/emailTransporter.js';
 
 /**
  * Gera  token JWT  o usuário.
