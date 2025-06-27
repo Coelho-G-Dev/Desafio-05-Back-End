@@ -10,3 +10,5 @@ public/
 
 # MongoDB Playground
 *.mongodb
+
+node_modules/
