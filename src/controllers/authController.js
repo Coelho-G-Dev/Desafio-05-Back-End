@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import PasswordResetToken from '../models/PasswordResetToken.js'; 
 import bcrypt from 'bcryptjs';

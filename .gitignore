@@ -1,14 +1,12 @@
-
-Dotenv
+# Arquivo de variáveis de ambiente
 .env
 
-
-IDE files
+# IDEs e arquivos do sistema
 .idea/
 .DS_Store
 
-# Ignorar a pasta de arquivos teste  do frontend
-/public
+# Pasta pública do frontend
+public/
 
-MongoDB Playground
-*.mongodb 
+# MongoDB Playground
+*.mongodb

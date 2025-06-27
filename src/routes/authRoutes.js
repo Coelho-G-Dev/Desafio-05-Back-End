@@ -83,7 +83,10 @@ router.post('/login', loginUser);
  */
 const socialAuthCallback = (strategyName) => (req, res, next) => {
   passport.authenticate(strategyName, { session: true }, (err, user, info) => {
-    if (err) return res.redirect(`/?authError=server_error`);
+    if (err) {
+      console.error('Erro no callback do Passport:', err); 
+      return res.redirect(`/?authError=server_error`);
+    }
     if (!user) return res.redirect(`/?authError=${info?.message ?? 'authentication_failed'}`);
     req.logIn(user, (loginErr) => {
       if (loginErr) return res.redirect(`/?authError=login_failed`);
@@ -91,6 +94,7 @@ const socialAuthCallback = (strategyName) => (req, res, next) => {
     });
   })(req, res, next);
 };
+
 
 /* Google OAuth */
 /**
