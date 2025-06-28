@@ -1,8 +1,9 @@
 const whitelist = [
   //'https://seu-frontend.netlify.app', // URL do seu site publicado(assim que for publicado)
-  'http://127.0.0.1:5500',             // Para testes locais (ex: Live Server do VS Code)
-  'http://localhost:5500',             // Para testes locais (ex: Live Server do VS Code)
-  'http://localhost:3001',             // Para o frontend ser servido pelo próprio backend (se usar express.static)
+  'http://127.0.0.1:5500',              // Para testes locais 
+  'http://localhost:5500',              // Para testes locais 
+  'http://localhost:3001',              // Para testes locais 
+  'http://localhost:3000',              // Para testes locais 
   'https://desafio-05-api.onrender.com' // URL do deploy no Render
 ];
 

@@ -1,6 +1,5 @@
 import fetch from 'node-fetch';
-import Place from '../models/Place.js'; // Importa o modelo Place
-
+import Place from '../models/Place.js'; 
 
 const MUNICIPIOS_MA = [
     "São Luís",
@@ -20,8 +19,8 @@ export const getMunicipios = (req, res) => {
 };
 
 /**
- * @param {Object} req - Objeto de requisição.
- * @param {Object} res - Objeto de resposta.
+ * @param {Object} req
+ * @param {Object} res 
  */
 export const searchHealthUnits = async (req, res) => {
     const { category, municipio } = req.query;
