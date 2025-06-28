@@ -15,26 +15,9 @@ const router = express.Router();
 
 /**
  * @swagger
- * openapi: 3.0.3
- * info:
- *   title: API de Autenticação
- *   version: 1.0.0
- *   description: |
- *     Sistema de gerenciamento de autenticação de usuários
- *     com login, registro e OAuth2
- * 
- * components:
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
- * 
  * tags:
- *   name: Autenticação
- *   description: Endpoints relacionados à autenticação de usuários (registro, login, OAuth, senha)
  *   - name: Autenticação
- *     description: Endpoints de gerenciamento de autenticação
+ *     description: Endpoints relacionados à autenticação de usuários (registro, login, OAuth, senha)
  */
 
 /* ========================= Registro ========================= */
@@ -45,29 +28,15 @@ const router = express.Router();
  *   post:
  *     summary: Registra um novo usuário
  *     description: Cria um novo usuário com nome de usuário, e-mail e senha.
- *     summary: Registra um novo usuário
  *     tags: [Autenticação]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [username, email, password]
- *             properties:
- *               username:
- *                 type: string
- *                 example: joaosilva
- *               email:
- *                 type: string
- *                 example: joao@example.com
- *               password:
- *                 type: string
- *                 example: senhaSegura123
  *             $ref: '#/components/schemas/UserRegister'
  *     responses:
  *       201:
- *         description: Usuário registrado com sucesso
  *         description: Usuário criado com sucesso
  *         content:
  *           application/json:
@@ -75,7 +44,6 @@ const router = express.Router();
  *               $ref: '#/components/schemas/AuthResponse'
  *       400:
  *         description: Dados inválidos ou usuário já existente
- *         description: Dados inválidos
  *       500:
  *         description: Erro interno do servidor
  */
@@ -114,9 +82,6 @@ router.post('/login', loginUser);
 
 /* ========================= OAuth - Google ========================= */
 
-/*  Autenticação Social  */
-
-/* Google OAuth */
 /**
  * @swagger
  * /api/auth/google:
@@ -143,9 +108,32 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
  */
 router.get('/google/callback', socialAuthCallback('google'));
 
-/* ========================= OAuth - GitHub (não documentado) ========================= */
+/* ========================= OAuth - GitHub ========================= */
 
+/**
+ * @swagger
+ * /api/auth/github:
+ *   get:
+ *     summary: Inicia autenticação via GitHub
+ *     description: Redireciona o usuário para o login via GitHub OAuth.
+ *     tags: [Autenticação]
+ *     responses:
+ *       302:
+ *         description: Redirecionamento para o GitHub OAuth
+ */
 router.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
+
+/**
+ * @swagger
+ * /api/auth/github/callback:
+ *   get:
+ *     summary: Callback da autenticação via GitHub
+ *     description: Processa a resposta de autenticação do GitHub e redireciona o usuário.
+ *     tags: [Autenticação]
+ *     responses:
+ *       302:
+ *         description: Redirecionamento para o frontend após login com GitHub
+ */
 router.get('/github/callback', socialAuthCallback('github'));
 
 /* ========================= Recuperação de Senha ========================= */
