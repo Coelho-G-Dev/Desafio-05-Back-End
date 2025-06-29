@@ -178,8 +178,8 @@ export const forgotPassword = async (req, res) => {
 
     // Gera um token de 32 bytes 
     const token = crypto.randomBytes(32).toString('hex');
-    const expiresAt = new Date(Date.now() + 900); // Token válido por 15 minutos
-
+    const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // Token válido por 1 Hora 
+    
     // Salva o token no banco de dados, substituindo tokens não usados para este usuário
     await PasswordResetToken.findOneAndUpdate(
       { userId: user._id, used: false },
@@ -188,7 +188,7 @@ export const forgotPassword = async (req, res) => {
     );
 
     const resetLink = `${process.env.BASE_RESET_URL}/redefinir-senha?token=${token}`;
-    
+
     const mailOptions = {
       from: process.env.FROM_EMAIL,
       to: user.email,
