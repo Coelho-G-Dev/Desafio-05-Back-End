@@ -187,8 +187,8 @@ export const forgotPassword = async (req, res) => {
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
 
-    const resetLink = `${process.env.BASE_RESET_URL}/reset-password.html?token=${token}`; // Link para o frontend
-
+    const resetLink = `${process.env.BASE_RESET_URL}/redefinir-senha?token=${token}`;
+    
     const mailOptions = {
       from: process.env.FROM_EMAIL,
       to: user.email,
