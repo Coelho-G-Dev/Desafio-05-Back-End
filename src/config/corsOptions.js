@@ -1,12 +1,11 @@
 const whitelist = [
-  'https://buscasusma-6wqy5z7jv-pytwers-projects.vercel.app/', // URL do seu site publicado(assim que for publicado)
+  'https://buscasusma-6wqy5z7jv-pytwers-projects.vercel.app', //front-end
   'http://127.0.0.1:5500',              // Para testes locais 
   'http://localhost:5500',              // Para testes locais 
   'http://localhost:3001',              // Para testes locais 
   'http://localhost:3000',              // Para testes locais 
   'https://desafio-05-api.onrender.com' // URL do deploy no Render
 ];
-
 const corsOptions = {
   origin: function (origin, callback) {
       // Permite requisições sem 'origin' (Postman)
@@ -22,5 +21,4 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos HTTP permitidos
   allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
 };
-
 export default corsOptions;
