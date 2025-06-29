@@ -1,5 +1,5 @@
 const whitelist = [
-  'https://buscasusma-6fwvfmdbp-pytwers-projects.vercel.app/', // URL do seu site publicado(assim que for publicado)
+  'https://buscasusma-b711ua4mc-pytwers-projects.vercel.app/', // URL do seu site publicado(assim que for publicado)
   'http://127.0.0.1:5500',              // Para testes locais 
   'http://localhost:5500',              // Para testes locais 
   'http://localhost:3001',              // Para testes locais 
