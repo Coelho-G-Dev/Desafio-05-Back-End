@@ -222,7 +222,3 @@ GET /api/health-units?category=Clínica+General&municipio=São+Luís
     
 
 ---
-
-## 📝 Licença
-
-Distribuído sob a licença **MIT** — consulte `LICENSE` para detalhes.
