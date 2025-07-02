@@ -73,7 +73,7 @@ export const registerUser = async (req, res) => {
     const user = await User.create({
       username,
       email,
-      password, // A senha será hasheada pelo middleware
+      password, // A senha será hasheada 
     });
 
     if (user) {
@@ -178,9 +178,9 @@ export const forgotPassword = async (req, res) => {
 
     // Gera um token de 32 bytes 
     const token = crypto.randomBytes(32).toString('hex');
-    const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // Token válido por 1 Hora 
+    const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // Token válido por 1 Hora, 60 minutos 
     
-    // Salva o token no banco de dados, substituindo tokens não usados para este usuário
+    // Salva o token no banco de dados, substituindo tokens não usados para este usuário e atualizando os tokens ja utillizados 
     await PasswordResetToken.findOneAndUpdate(
       { userId: user._id, used: false },
       { userId: user._id, token, expiresAt, used: false },
@@ -212,7 +212,7 @@ export const forgotPassword = async (req, res) => {
     res.json({ message: 'Se o e-mail estiver cadastrado, um link de recuperação será enviado.' });
 
   } catch (error) {
-    console.error('Erro ao solicitar redefinição de senha:', error);
+    console.error('Erro ao solicitar redefinição de senha:', error); //Email não cadastrado 
     if (error.response && error.response.body && error.response.body.errors) {
       console.error('Erros do SendGrid:', error.response.body.errors);
     }
