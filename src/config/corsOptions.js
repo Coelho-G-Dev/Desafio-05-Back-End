@@ -2,6 +2,7 @@ const whitelist = [
   'https://buscasusma-e9idvek5v-pytwers-projects.vercel.app/', //front-end
   'https://buscasusma-e9idvek5v-pytwers-projects.vercel.app', 
   'https://buscasusma-b711ua4mc-pytwers-projects.vercel.app/',              // Para testes locais 
+  'https://buscasusma-bt1fubdt2-pytwers-projects.vercel.app/',
   'http://localhost:3001',              // Para testes locais 
   'http://localhost:3000',              // Para testes locais 
   'https://desafio-05-api.onrender.com' // URL do deploy no Render
