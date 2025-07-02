@@ -4,7 +4,7 @@ import Place from '../models/Place.js';
 const MUNICIPIOS_MA = [
     "São Luís",
     "São José de Ribamar",
-    "Paço do Lumiar",
+    "Paço do Lumiar"
 ];
 
 /**
