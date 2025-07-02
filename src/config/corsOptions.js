@@ -1,6 +1,6 @@
 const whitelist = [
   'https://buscasusma-e9idvek5v-pytwers-projects.vercel.app/', //front-end
-  'http://127.0.0.1:5500',              // Para testes locais 
+  'https://buscasusma-e9idvek5v-pytwers-projects.vercel.app/', 
   'http://localhost:5500',              // Para testes locais 
   'http://localhost:3001',              // Para testes locais 
   'http://localhost:3000',              // Para testes locais 
