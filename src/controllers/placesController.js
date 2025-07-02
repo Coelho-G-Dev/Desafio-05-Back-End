@@ -5,7 +5,6 @@ const MUNICIPIOS_MA = [
     "São Luís",
     "São José de Ribamar",
     "Paço do Lumiar",
-    "Raposa"
 ];
 
 /**
