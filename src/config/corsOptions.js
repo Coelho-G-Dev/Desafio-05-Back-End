@@ -6,7 +6,9 @@ const whitelist = [
   'https://buscasusma-5ccgwauyy-pytwers-projects.vercel.app/',              // Para testes locais 
   'https://buscasusma-b711ua4mc-pytwers-projects.vercel.app/',  
   'https://buscasusma-lllb9440s-pytwers-projects.vercel.app/',
-  'https://buscasusma-7pgtj8a5d-pytwers-projects.vercel.app/' ,          // Para testes locais 
+  'https://buscasusma-7pgtj8a5d-pytwers-projects.vercel.app/' ,
+  'https://buscasusma-b711ua4mc-pytwers-projects.vercel.app/jogar',   
+  'https://buscasusma-b711ua4mc-pytwers-projects.vercel.app/',       // Para testes locais ,       
   'https://desafio-05-api.onrender.com' // URL do deploy no Render
 ];
 const corsOptions = {
