@@ -5,6 +5,7 @@ const PlaceSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    index: true, 
   },
   displayName: {
     text: String,
@@ -12,23 +13,20 @@ const PlaceSchema = new mongoose.Schema({
   },
   formattedAddress: String,
   nationalPhoneNumber: String,
-  municipio: String, // Para qual município este lugar pertence
-  category: String, // Categoria que foi buscada
-  geometry: { 
-    location: {
-      lat: Number,
-      lng: Number,
-    },
-    viewport: {
-      northeast: { lat: Number, lng: Number },
-      southwest: { lat: Number, lng: Number },
-    },
+  municipio: {
+    type: String,
+    index: true, 
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
+  category: {
+    type: String,
+    index: true, 
   },
+
+}, {
+  timestamps: true,
 });
+
+PlaceSchema.index({ municipio: 1, category: 1 });
 
 const Place = mongoose.model('Place', PlaceSchema);
 
