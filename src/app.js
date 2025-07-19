@@ -26,8 +26,6 @@ app.use(express.json());
 app.use(mongoSanitize());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use(express.static('public')); 
-
 
 app.use(
   session({
