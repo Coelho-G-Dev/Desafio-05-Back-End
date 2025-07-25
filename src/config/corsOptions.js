@@ -2,7 +2,7 @@ const whitelist = [
   'https://buscasusma-7pgtj8a5d-pytwers-projects.vercel.app',       // Para testes locais ,       
   'https://buscasusma-7pgtj8a5d-pytwers-projects.vercel.app/',
   'https://desafio-05-api.onrender.com',
-  'http://localhost:3001'
+  'http://localhost:3000'
 ];
 const corsOptions = {
   origin: function (origin, callback) {
