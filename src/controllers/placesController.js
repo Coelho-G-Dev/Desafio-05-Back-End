@@ -9,7 +9,6 @@ import { getMaranhaoMunicipios } from '../Services/ibgeService.js';
  */
 export const getMunicipios = async (req, res) => {
     try {
-        // Apenas chama o serviço e retorna o resultado
         const municipios = await getMaranhaoMunicipios();
         res.json(municipios);
     } catch (error) {
