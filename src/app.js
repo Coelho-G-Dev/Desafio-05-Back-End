@@ -11,7 +11,6 @@ import './config/emailTransporter.js';
 import cors from 'cors';
 import corsOptions from './config/corsOptions.js';
 import MongoStore from 'connect-mongo'; 
-
 import placesRoutes from './routes/placesRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import { getMaranhaoMunicipios } from './Services/ibgeService.js';
@@ -20,6 +19,7 @@ import { getMaranhaoMunicipios } from './Services/ibgeService.js';
 connectDB();
 
 const app = express();
+
 
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -133,5 +133,8 @@ const startServer = async () => {
     process.exit(1); 
   }
 };
+
+
+
 
 startServer();

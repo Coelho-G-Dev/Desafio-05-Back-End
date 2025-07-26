@@ -19,7 +19,7 @@ const maranhaoSchema = new mongoose.Schema(
 
     itemCount: {
         type: Number,
-        equired: true,
+        required: true,
     },
     
     source: {

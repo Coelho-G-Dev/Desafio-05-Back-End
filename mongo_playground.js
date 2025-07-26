@@ -1,4 +1,4 @@
-// MongoDB Playground
+import { text } from "express";
 
 use('Desafio-05');
 
@@ -14,10 +14,9 @@ db.users.updateOne(
       createdAt: new Date()
     }
   },
-  { upsert: true } // Insere se não existir
+  { upsert: true }
 );
 
-// Inserir um usuário com role de admin para efetur  testes de autorização
 db.users.updateOne(
   { email: "admin@example.com" },
   {
@@ -31,22 +30,18 @@ db.users.updateOne(
   { upsert: true }
 );
 
-// 2. Buscar todos os usuários
 print("\n--- Buscando todos os usuários ---");
 db.users.find({});
 
-// 3. Buscar um usuário específico pelo email
 print("\n--- Buscando usuário por email ---");
 db.users.find({ email: "teste@example.com" });
 
-// 4. Atualizar o papel  de um usuário
 print("\n--- Atualizando o papel de um usuário ---");
 db.users.updateOne(
   { email: "teste@example.com" },
   { $set: { role: "admin" } }
 );
 
-// Verifique a atualização
 print("\n--- Verificando o papel atualizado ---");
 db.users.find({ email: "teste@example.com" });
 
@@ -91,15 +86,31 @@ db.places.updateMany(
 );
 
 
-// 2. Buscar todos os lugares
+db.requisitions.updateMany(
+  {requisicoesId: "test_req_id" },
+  {
+    $setOnInsert : {
+      requisicoesId: "test_req_id_2",
+      municipioName: {text: "São Luís", languageCode: "pt-BR"},
+      catergoriaName: {text: "Hospital", languageCode: "pt-BR"},
+      bairroName: {text: "Centro", languageCode: "pt-BR"},
+      unidadeName: {Text:"Hospital São Domingos", languageCode: "pt-BR"},
+      createdAt : new Date()
+  },
+})
+
+db.data.
+
+
+
 print("\n--- Buscando todos os lugares ---");
 db.places.find({});
 
-// 3. Buscar lugares por município e categoria
 print("\n--- Buscando lugares em São Luís na categoria 'Clínica Geral' ---");
 db.places.find({ municipio: "São Luís", category: "Clínica Geral" });
 
-// 4. Agregações: Contar lugares por município
+print("\n--- Adicionando as requisições para o db  ---");
+
 print("\n--- Contando lugares por município ---");
 db.places.aggregate([
   { $group: { _id: "$municipio", count: { $sum: 1 } } }

@@ -45,6 +45,8 @@ export const searchHealthUnits = async (req, res) => {
         return res.status(500).json({ message: 'Falha ao obter a lista de municípios para a busca.' });
     }
 
+
+
     const searchUrl = 'https://places.googleapis.com/v1/places:searchText';
     const resultsByMunicipality = {};
 
