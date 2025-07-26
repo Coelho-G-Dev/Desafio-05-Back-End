@@ -23,9 +23,7 @@ export const getMaranhaoMunicipios = async () => {
             throw new Error(`Falha ao buscar dados da API do IBGE: ${response.statusText}`);
         }
         const data = await response.json();
-        
         const municipios = data.map(municipio => municipio.nome).sort();
-
         cachedMunicipios = municipios;
         lastFetchTime = now;
         console.log(`Cache de municípios atualizado com ${municipios.length} itens.`);

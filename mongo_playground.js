@@ -106,14 +106,3 @@ db.places.aggregate([
 ]);
 
 
-
-// ->NÃO IMPLEMENTADO<-
-// 5. Deletar lugares de teste (use com cautela!)
-//print("\n--- Deletando lugares de teste (use com cautela!) ---");
-//db.places.deleteMany({ placeId: { $in: ["test_place_id_1", "test_place_id_2"] } });
-
-
-// --- Comandos básicos de shell (apenas para referência, execute linha a linha) ---
-// show dbs;             // Mostra todos os bancos de dados
-// show collections;     // Mostra todas as coleções no banco de dados atual
-// db.users.countDocuments({}); // Conta o número de documentos na coleção users
