@@ -50,12 +50,11 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/api/simulador', simuladorRoutes);
 app.use('/api/places', placesRoutes);
 app.use('/api/auth', authRoutes); 
 
 app.get('/', (req, res) => {
-    res.json({ message: 'API Saúde-MA está no ar!', docs: '/api-docs' });
+    res.json({ message: 'API Saúde-MA está no ar!!', docs: '/api-docs' });
 });
 
 /**
