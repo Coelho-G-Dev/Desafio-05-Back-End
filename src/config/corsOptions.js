@@ -1,9 +1,9 @@
 const whitelist = [
-  'https://buscasusma-7pgtj8a5d-pytwers-projects.vercel.app',       //testes locais ,       
+  'http://localhost:3001',    
   'https://hackathon-front-aal9.vercel.app',
   'https://desafio-05-api.onrender.com',
   'http://localhost:3000',
-  'https://hackathon-front-aal9.vercel.app/',
+  'https://hackathon-front-aal9.vercel.app',
   'https://buscasusma-eight.vercel.app'
 ];
 const corsOptions = {

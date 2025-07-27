@@ -14,6 +14,8 @@ import MongoStore from 'connect-mongo';
 import placesRoutes from './routes/placesRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import { getMaranhaoMunicipios } from './Services/ibgeService.js';
+import pg_db from './config/db_postgres.js';
+
 
 
 connectDB();
@@ -47,7 +49,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/api', placesRoutes);
+app.use('/api/places', placesRoutes);
 app.use('/api/auth', authRoutes); 
 
 app.get('/', (req, res) => {
@@ -118,6 +120,10 @@ const startServer = async () => {
     console.log('Iniciando conexão com o MongoDB...');
     await connectDB();
     console.log('✅ Conexão com o MongoDB estabelecida.');
+
+    console.log('Verificando conexão com o PostgreSQL...');
+    await pg_db.query('SELECT NOW()'); 
+    console.log('✅ Conexão com o PostgreSQL estabelecida.');
 
     console.log('Verificando/aquecendo o cache de municípios...');
     await getMaranhaoMunicipios();
