@@ -18,6 +18,7 @@ import pg_db from './config/db_postgres.js';
 
 
 
+
 connectDB();
 
 const app = express();
@@ -49,6 +50,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/api/simulador', simuladorRoutes);
 app.use('/api/places', placesRoutes);
 app.use('/api/auth', authRoutes); 
 
@@ -139,8 +141,7 @@ const startServer = async () => {
     process.exit(1); 
   }
 };
-
-
+""
 
 
 startServer();

@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest --detectOpenHandles"
   },
   "keywords": [],
   "author": "Your Name",
@@ -32,6 +33,10 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.3"
+    "cross-env": "^10.0.0",
+    "jest": "^30.0.5",
+    "mongodb-memory-server": "^10.1.4",
+    "nodemon": "^3.1.3",
+    "supertest": "^7.1.4"
   }
 }

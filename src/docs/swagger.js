@@ -101,6 +101,10 @@ const swaggerDefinition = {
       name: 'Locais',
       description: 'Endpoints para consulta de municípios e busca por unidades de saúde.',
     },
+    {
+      name: 'Unidades de Saúde',
+      description: 'Endpoints para a lógica de negócio do usuário (sugestões, registros).',
+    },
   ],
 };
 
