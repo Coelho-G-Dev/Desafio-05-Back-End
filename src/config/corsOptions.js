@@ -5,7 +5,7 @@ const whitelist = [
   'http://localhost:3000',
   'https://hackathon-front-aal9.vercel.app/',
   'https://buscasusma-eight.vercel.app',
-  'https://buscasaudema.vercel.app/'
+  'https://buscasaudema.vercel.app'
 ];
 const corsOptions = {
   origin: function (origin, callback) {
