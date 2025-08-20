@@ -1,7 +1,7 @@
 # 🗺️ API de Rotas e Locais com Google Cloud e Autenticação
 
 Back‑end de uma aplicação web que integra **Google Maps Platform** (Maps, Places e Directions) a um sistema de **autenticação completo** (login interno via JWT + Google OAuth + GitHub OAuth).  
-Persistência em **MongoDB**, com _fallback_ local caso as APIs externas fiquem indisponíveis.
+Persistência em **MongoDB**, com _fallback_ local caso as APIs externas fiquem indisponíveis..
 
 ---
 
